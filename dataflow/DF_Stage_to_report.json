@@ -1,51 +1,36 @@
 {
-	"name": "DF_customer_raw_to_staging",
+	"name": "DF_Stage_to_report",
 	"properties": {
-		"description": "Converting customer from raw schema to  staging layer by cleaning and sorting",
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTableCustomer",
+						"referenceName": "AzureSqlTableStageCustomer",
 						"type": "DatasetReference"
 					},
-					"name": "srcCustomer",
-					"description": "Add source dataset from raw to staging layer"
+					"name": "source1"
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTableOrders",
+						"referenceName": "AzureSqlTable3",
 						"type": "DatasetReference"
 					},
-					"name": "src"
+					"name": "srcStagingOrders"
 				}
 			],
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTableCleanedCustomer",
+						"referenceName": "AzureSqlTableJoinedReport",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
-				},
-				{
-					"dataset": {
-						"referenceName": "AzureSqlTable1",
-						"type": "DatasetReference"
-					},
-					"name": "sink2"
 				}
 			],
 			"transformations": [
 				{
-					"name": "sort1"
-				},
-				{
-					"name": "derivedColumn1"
-				},
-				{
-					"name": "derivedColumn2"
+					"name": "joinCustomerToOrders"
 				}
 			],
 			"scriptLines": [
@@ -64,7 +49,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> srcCustomer",
+				"     format: 'table') ~> source1",
 				"source(output(",
 				"          OrderID as string,",
 				"          ProductID as string,",
@@ -77,11 +62,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> src",
-				"srcCustomer sort(asc(CustomerID, true)) ~> sort1",
-				"sort1 derive(each(match(1==1), $$ = iifNull($$, toString(\"NULL\")))) ~> derivedColumn1",
-				"src derive(each(match(1==1), $$ = iifNull($$, toString(\"NULL\")))) ~> derivedColumn2",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     format: 'table') ~> srcStagingOrders",
+				"source1, srcStagingOrders join(source1@CustomerID == srcStagingOrders@CustomerID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> joinCustomerToOrders",
+				"joinCustomerToOrders sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -90,17 +77,7 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
-				"derivedColumn2 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
