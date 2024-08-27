@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "DF-JMD314-001"
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"LS_BLOB_JMD314_001_connectionString": {
+			"value": ""
+		},
+		"LS_Blob_output_JMD314_001_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "ss-jmd314-001.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "DB-JMD314-001"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "ss-jmd314-001"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
