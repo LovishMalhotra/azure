@@ -1,0 +1,12 @@
+{
+	"name": "LS_Blob_output_JMD314_001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": "DefaultEndpointsProtocol=https;AccountName=sajmd314;EndpointSuffix=core.windows.net;",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDU0MTYzNTMwLTQ0MzEtNDI2MC04Q0Y0LTFBMzVDNDFBRUIyNF8xOWIwOWEzYi0wZmI0LTRhNjktYjI5NC00MjBlMmQ2ZjE4NzAiDQp9"
+		}
+	}
+}
