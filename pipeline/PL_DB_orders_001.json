@@ -1,5 +1,5 @@
 {
-	"name": "PL_DB_customer_001",
+	"name": "PL_DB_orders_001",
 	"properties": {
 		"activities": [
 			{
@@ -45,13 +45,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "consolidatedCustomers",
+						"referenceName": "consolidatedOrders",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "AzureSqlTableCustomer",
+						"referenceName": "AzureSqlTableOrders",
 						"type": "DatasetReference"
 					}
 				]
