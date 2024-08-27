@@ -13,11 +13,7 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [
-				{
-					"name": "aggregate1"
-				}
-			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          {Row ID} as string,",
@@ -45,8 +41,7 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> source1",
-				"source1 aggregate() ~> aggregate1"
+				"     format: 'table') ~> source1"
 			]
 		}
 	}
