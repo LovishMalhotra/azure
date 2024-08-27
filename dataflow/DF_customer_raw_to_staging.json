@@ -1,0 +1,32 @@
+{
+	"name": "DF_customer_raw_to_staging",
+	"properties": {
+		"description": "Converting customer from raw schema to  staging layer by cleaning and sorting",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableCustomer",
+						"type": "DatasetReference"
+					},
+					"name": "srcCustomer",
+					"description": "Add source dataset from raw to staging layer"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "sort1"
+				}
+			],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcCustomer",
+				"srcCustomer sort(asc(ERROR_FUNCTION(''), true)) ~> sort1"
+			]
+		}
+	}
+}
