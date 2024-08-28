@@ -1,0 +1,14 @@
+{
+	"name": "LS_Skillhub_MongoDB_001",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "MongoDbAtlas",
+		"typeProperties": {
+			"connectionString": "mongodb+srv://lovishmalhotra2441:@cluster0.ipj4yj6.mongodb.net",
+			"database": "skillshub",
+			"driverVersion": "v2",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDU0MTYzNTMwLTQ0MzEtNDI2MC04Q0Y0LTFBMzVDNDFBRUIyNF9jYmNiMzFjOS1kZGIzLTRmN2MtYTMwNS01ZGIxODI1Y2VhZjMiDQp9"
+		}
+	}
+}
