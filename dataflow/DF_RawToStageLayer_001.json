@@ -40,6 +40,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedProfile",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
 				}
 			],
 			"transformations": [
@@ -54,10 +61,6 @@
 				},
 				{
 					"name": "aggregate1"
-				},
-				{
-					"name": "derivedColumn1",
-					"description": "Making Skill And Level into one column"
 				},
 				{
 					"name": "filter1"
@@ -108,16 +111,16 @@
 				"          role = first(role)) ~> aggregateToRemoveDuplicates",
 				"aggregate2 filter(!isNull(id) || !isNull(id) || !isNull(skillImage)) ~> filterForNullValues",
 				"aggregateToRemoveDuplicates filter(!isNull(id) || !isNull(email) || !isNull(password) || !isNull(role)) ~> filterNullValues",
-				"filter1 aggregate(groupBy(id),",
+				"filter1 aggregate(groupBy(id,",
+				"          skill,",
+				"          level),",
 				"     user_id = first(user_id),",
 				"          name = first(name),",
 				"          designation = first(designation),",
 				"          department = first(department),",
 				"          phone = first(phone),",
-				"          imageUrl = first(imageUrl),",
-				"          {Skill-Level} = collect({Skill-Level})) ~> aggregate1",
-				"srcProfiles derive({Skill-Level} = concat( skill, ',', level)) ~> derivedColumn1",
-				"derivedColumn1 filter(!isNull(id) || !isNull(user_id)) ~> filter1",
+				"          imageUrl = first(imageUrl)) ~> aggregate1",
+				"srcProfiles filter(!isNull(id) || !isNull(user_id)) ~> filter1",
 				"srcSkills aggregate(groupBy(id,",
 				"          tech_name,",
 				"          skillName),",
@@ -141,7 +144,17 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink3"
 			]
 		}
 	}

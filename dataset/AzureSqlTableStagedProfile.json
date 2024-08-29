@@ -1,5 +1,5 @@
 {
-	"name": "AzureSqlTableStagedUsers",
+	"name": "AzureSqlTableStagedProfile",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase1",
@@ -9,8 +9,8 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "staged",
-			"table": "SkillhubUsers"
+			"schema": "stage",
+			"table": "Skillhub_Profile"
 		}
 	}
 }
