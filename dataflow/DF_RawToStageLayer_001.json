@@ -1,0 +1,148 @@
+{
+	"name": "DF_RawToStageLayer_001",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SkillhubSkills",
+						"type": "DatasetReference"
+					},
+					"name": "srcSkills"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlSkillshubUsers",
+						"type": "DatasetReference"
+					},
+					"name": "srcUsers"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableSKillhubProfile",
+						"type": "DatasetReference"
+					},
+					"name": "srcProfiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedSkillhubSkills",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedUsers",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregateToRemoveDuplicates"
+				},
+				{
+					"name": "filterForNullValues"
+				},
+				{
+					"name": "filterNullValues"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1",
+					"description": "Making Skill And Level into one column"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "aggregate2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          tech_name as string,",
+				"          id as string,",
+				"          skillName as string,",
+				"          skillImage as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcSkills",
+				"source(output(",
+				"          id as string,",
+				"          email as string,",
+				"          password as string,",
+				"          role as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcUsers",
+				"source(output(",
+				"          id as string,",
+				"          user_id as string,",
+				"          name as string,",
+				"          designation as string,",
+				"          department as string,",
+				"          phone as string,",
+				"          imageUrl as string,",
+				"          skill as string,",
+				"          level as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcProfiles",
+				"srcUsers aggregate(groupBy(id),",
+				"     email = first(email),",
+				"          password = first(password),",
+				"          role = first(role)) ~> aggregateToRemoveDuplicates",
+				"aggregate2 filter(!isNull(id) || !isNull(id) || !isNull(skillImage)) ~> filterForNullValues",
+				"aggregateToRemoveDuplicates filter(!isNull(id) || !isNull(email) || !isNull(password) || !isNull(role)) ~> filterNullValues",
+				"filter1 aggregate(groupBy(id),",
+				"     user_id = first(user_id),",
+				"          name = first(name),",
+				"          designation = first(designation),",
+				"          department = first(department),",
+				"          phone = first(phone),",
+				"          imageUrl = first(imageUrl),",
+				"          {Skill-Level} = collect({Skill-Level})) ~> aggregate1",
+				"srcProfiles derive({Skill-Level} = concat( skill, ',', level)) ~> derivedColumn1",
+				"derivedColumn1 filter(!isNull(id) || !isNull(user_id)) ~> filter1",
+				"srcSkills aggregate(groupBy(id,",
+				"          tech_name,",
+				"          skillName),",
+				"     skillImage = first(skillImage)) ~> aggregate2",
+				"filterForNullValues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1",
+				"filterNullValues sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink2"
+			]
+		}
+	}
+}

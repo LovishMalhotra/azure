@@ -1,0 +1,15 @@
+{
+	"name": "MongoDbAtlasCollection3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Skillhub_MongoDB_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "MongoDbAtlasCollection",
+		"schema": [],
+		"typeProperties": {
+			"collection": "users"
+		}
+	}
+}

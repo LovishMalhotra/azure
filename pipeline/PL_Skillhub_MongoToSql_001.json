@@ -3,6 +3,169 @@
 	"properties": {
 		"activities": [
 			{
+				"name": "CD_skills",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MongoDbAtlasSource",
+						"batchSize": 100
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "drop table if exists raw.Skillshub_skills",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['name']"
+								},
+								"sink": {
+									"name": "tech_name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['_id']['$oid']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['skillName']"
+								},
+								"sink": {
+									"name": "skillName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['skillImage']"
+								},
+								"sink": {
+									"name": "skillImage",
+									"type": "String"
+								}
+							}
+						],
+						"collectionReference": "$['techStack']",
+						"mapComplexValuesToString": true
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MongoDbAtlasCollection2",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SkillhubSkills",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "CD_Users",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "MongoDbAtlasSource",
+						"batchSize": 100
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": "drop table if exists raw.Skillshub_users",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false,
+						"tableOption": "autoCreate",
+						"disableMetricsCollection": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "$['_id']['$oid']"
+								},
+								"sink": {
+									"name": "id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['email']"
+								},
+								"sink": {
+									"name": "email"
+								}
+							},
+							{
+								"source": {
+									"path": "$['password']"
+								},
+								"sink": {
+									"name": "password",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['role']"
+								},
+								"sink": {
+									"name": "role",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MongoDbAtlasCollection3",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlSkillshubUsers",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
 				"name": "Copy data1",
 				"type": "Copy",
 				"dependsOn": [],
@@ -21,6 +184,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "drop table if exists raw.Skillshub_Profile",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"tableOption": "autoCreate",
@@ -32,16 +196,7 @@
 						"mappings": [
 							{
 								"source": {
-									"path": "$['skillName']"
-								},
-								"sink": {
-									"name": "skillName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"path": "$['_id']"
+									"path": "$['_id']['$oid']"
 								},
 								"sink": {
 									"name": "id",
@@ -50,27 +205,89 @@
 							},
 							{
 								"source": {
-									"path": "$['skillImage']"
+									"path": "$['user']['$oid']"
 								},
 								"sink": {
-									"name": "skillImage",
+									"name": "user_id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['name']"
+								},
+								"sink": {
+									"name": "name",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['designation']"
+								},
+								"sink": {
+									"name": "designation",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['department']"
+								},
+								"sink": {
+									"name": "department",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['phone']"
+								},
+								"sink": {
+									"name": "phone",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['imageUrl']"
+								},
+								"sink": {
+									"name": "imageUrl",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['skillName']"
+								},
+								"sink": {
+									"name": "skill",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['level']"
+								},
+								"sink": {
+									"name": "level",
 									"type": "String"
 								}
 							}
 						],
-						"collectionReference": "",
-						"mapComplexValuesToString": true
+						"collectionReference": "$['skills']"
 					}
 				},
 				"inputs": [
 					{
-						"referenceName": "MongoDbAtlasCollection2",
+						"referenceName": "MongoDbAtlasCollection4",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "SkillhubSkills",
+						"referenceName": "AzureSqlTableSKillhubProfile",
 						"type": "DatasetReference"
 					}
 				]
