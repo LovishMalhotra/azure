@@ -21,7 +21,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "drop table if exists raw.Skillshub_skills",
+						"preCopyScript": "drop table if exists raw.SkillHub_skills",
 						"writeBehavior": "insert",
 						"sqlWriterUseTableLock": false,
 						"tableOption": "autoCreate",
