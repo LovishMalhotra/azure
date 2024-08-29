@@ -5,14 +5,74 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"name": "source1"
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedProfile",
+						"type": "DatasetReference"
+					},
+					"name": "srcStagedProfiles"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedSkillhubSkills",
+						"type": "DatasetReference"
+					},
+					"name": "srcStagedUsers"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableStagedSkillhubSkills",
+						"type": "DatasetReference"
+					},
+					"name": "srcStagedSkills"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "join1"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1"
+				"source(output(",
+				"          id as string,",
+				"          skill as string,",
+				"          level as string,",
+				"          user_id as string,",
+				"          name as string,",
+				"          designation as string,",
+				"          department as string,",
+				"          phone as string,",
+				"          imageUrl as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcStagedProfiles",
+				"source(output(",
+				"          id as string,",
+				"          tech_name as string,",
+				"          skillName as string,",
+				"          skillImage as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcStagedUsers",
+				"source(output(",
+				"          id as string,",
+				"          tech_name as string,",
+				"          skillName as string,",
+				"          skillImage as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> srcStagedSkills",
+				"srcStagedProfiles, srcStagedUsers join(user_id == srcStagedUsers@id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1"
 			]
 		}
 	}

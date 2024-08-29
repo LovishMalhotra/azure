@@ -9,7 +9,7 @@
 		"type": "AzureSqlTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "staged",
+			"schema": "stage",
 			"table": "SkillhubUsers"
 		}
 	}
