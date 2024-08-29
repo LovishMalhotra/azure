@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "AzureSqlTableStagedSkillhubSkills",
+						"referenceName": "AzureSqlTableStagedUsers",
 						"type": "DatasetReference"
 					},
 					"name": "srcStagedUsers"
@@ -26,7 +26,15 @@
 					"name": "srcStagedSkills"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTableReportUsers",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "join1"
@@ -50,9 +58,9 @@
 				"     format: 'table') ~> srcStagedProfiles",
 				"source(output(",
 				"          id as string,",
-				"          tech_name as string,",
-				"          skillName as string,",
-				"          skillImage as string",
+				"          email as string,",
+				"          password as string,",
+				"          role as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -72,7 +80,17 @@
 				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1"
+				"     broadcast: 'auto')~> join1",
+				"join1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
