@@ -1,0 +1,106 @@
+{
+	"name": "Excel3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_BLOB_JMD314_001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "products_raw",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "products_raw.xlsx",
+				"container": "misumiproducts"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "departmentCode",
+				"type": "String"
+			},
+			{
+				"name": "categoryCode",
+				"type": "String"
+			},
+			{
+				"name": "categoryName",
+				"type": "String"
+			},
+			{
+				"name": "searchCategoryCode",
+				"type": "String"
+			},
+			{
+				"name": "seriesCode",
+				"type": "String"
+			},
+			{
+				"name": "seriesName",
+				"type": "String"
+			},
+			{
+				"name": "brandCode",
+				"type": "String"
+			},
+			{
+				"name": "brandUrlCode",
+				"type": "String"
+			},
+			{
+				"name": "brandName",
+				"type": "String"
+			},
+			{
+				"name": "seriesStatus",
+				"type": "String"
+			},
+			{
+				"name": "catchCopy",
+				"type": "String"
+			},
+			{
+				"name": "minStandardDaysToShip",
+				"type": "String"
+			},
+			{
+				"name": "maxStandardDaysToShip",
+				"type": "String"
+			},
+			{
+				"name": "directCartType",
+				"type": "String"
+			},
+			{
+				"name": "priceCheckLessFlag",
+				"type": "String"
+			},
+			{
+				"name": "recommendFlag",
+				"type": "String"
+			},
+			{
+				"name": "volumeDiscountFlag",
+				"type": "String"
+			},
+			{
+				"name": "cValueFlag",
+				"type": "String"
+			},
+			{
+				"name": "stockItemFlag",
+				"type": "String"
+			},
+			{
+				"name": "displayStandardPriceFlag",
+				"type": "String"
+			},
+			{
+				"name": "discontinuedProductFlag",
+				"type": "String"
+			}
+		]
+	}
+}

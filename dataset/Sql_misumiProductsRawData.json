@@ -1,0 +1,16 @@
+{
+	"name": "Sql_misumiProductsRawData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "raw",
+			"table": "misumiProducts"
+		}
+	}
+}
